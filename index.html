@@ -108,7 +108,7 @@ function startMode(m){
   if(m==='wrong'){
     if(wrongWords.length===0){alert('まだ間違えた単語がありません！');return;}
     const pool=V.filter(v=>wrongWords.includes(v.word));
-    qs=shuffle([...pool]);
+    qs=shuffle([...pool]).slice(0,20);
   } else {
     qs=shuffle([...V]).slice(0,20);
   }
