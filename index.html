@@ -157,6 +157,60 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;ba
 /* overlay tap dismiss */
 #pl-popup-overlay{display:none;position:fixed;inset:0;z-index:199;}
 
+/* ===== SYNONYM ===== */
+.syn-category-header{font-size:13px;font-weight:700;color:#8e8e93;text-transform:uppercase;letter-spacing:.5px;margin:18px 0 6px;}
+.syn-group{background:#fff;border-radius:12px;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,.08);overflow:hidden;}
+.syn-group-header{padding:11px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #f2f2f7;}
+.syn-group-theme{font-size:14px;font-weight:600;color:#1c1c1e;}
+.syn-group-count{font-size:12px;color:#8e8e93;margin-right:6px;}
+.syn-group-arrow{font-size:12px;color:#c7c7cc;transition:transform .2s;}
+.syn-group.open .syn-group-arrow{transform:rotate(90deg);}
+.syn-group-body{display:none;padding:10px 14px 12px;}
+.syn-group.open .syn-group-body{display:block;}
+.syn-word-row{display:flex;align-items:baseline;gap:8px;padding:5px 0;border-bottom:1px solid #f2f2f7;}
+.syn-word-row:last-child{border-bottom:none;}
+.syn-word{font-size:15px;font-weight:600;min-width:140px;}
+.syn-word.in-db{color:#007aff;}
+.syn-word.not-db{color:#8e8e93;}
+.syn-meaning{font-size:13px;color:#3c3c43;flex:1;}
+.syn-db-badge{font-size:10px;padding:1px 5px;border-radius:6px;background:#e8f4fd;color:#007aff;font-weight:600;white-space:nowrap;}
+
+/* ===== FLASHCARD ===== */
+#fc-wrap{ display:none; }
+.fc-card{
+  background:#fff;border-radius:20px;
+  box-shadow:0 4px 20px rgba(0,0,0,.12);
+  padding:32px 24px;margin:16px;
+  min-height:200px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  cursor:pointer;position:relative;
+  transition:transform .15s;
+  user-select:none;
+}
+.fc-card:active{ transform:scale(.98); }
+.fc-word{ font-size:32px;font-weight:700;color:#1c1c1e;text-align:center;margin-bottom:8px; }
+.fc-pos{ font-size:13px;color:#8e8e93;margin-bottom:4px; }
+.fc-hint{ font-size:13px;color:#007aff;margin-top:12px; }
+.fc-back{ display:none;width:100%;text-align:center; }
+.fc-meaning{ font-size:20px;font-weight:600;color:#1c1c1e;margin-bottom:10px;text-align:center; }
+.fc-etym{ font-size:13px;color:#636366;line-height:1.5;text-align:center;margin-top:6px;padding:10px 12px;background:#f2f2f7;border-radius:10px;width:100%;box-sizing:border-box; }
+.fc-actions{ display:flex;gap:12px;padding:0 16px 16px;margin-top:4px; }
+.fc-btn{ flex:1;padding:14px 0;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer; }
+.fc-btn-ng{ background:#ffe4e4;color:#ff3b30; }
+.fc-btn-ok{ background:#e4f9ea;color:#34c759; }
+.fc-progress-wrap{ margin:8px 16px 0;display:flex;align-items:center;gap:8px;font-size:12px;color:#8e8e93; }
+.fc-progress-bar-bg{ flex:1;height:4px;background:#e5e5ea;border-radius:4px;overflow:hidden; }
+.fc-progress-bar{ height:4px;background:#007aff;border-radius:4px;transition:width .3s; }
+.fc-stat{ display:flex;gap:16px;justify-content:center;padding:0 16px;margin-top:8px; }
+.fc-stat-item{ text-align:center; }
+.fc-stat-num{ font-size:22px;font-weight:700; }
+.fc-stat-lbl{ font-size:11px;color:#8e8e93; }
+#fc-result{ display:none;padding:24px 16px;text-align:center; }
+.fc-result-title{ font-size:22px;font-weight:700;margin-bottom:6px; }
+.fc-result-sub{ font-size:14px;color:#8e8e93;margin-bottom:20px; }
+.fc-retry-btn{ background:#007aff;color:#fff;border:none;border-radius:14px;padding:14px 32px;font-size:16px;font-weight:700;cursor:pointer;margin:6px; }
+.fc-retry-ng{ background:#ff3b30; }
+
 /* ===== カウントダウン ===== */
 #countdown-overlay{
   position:fixed;inset:0;z-index:999;background:rgba(0,0,0,.55);
@@ -246,6 +300,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;ba
   <button class="nav-btn active" onclick="showTab('home')">ホーム</button>
   <button class="nav-btn" onclick="showTab('quiz')">クイズ</button>
   <button class="nav-btn" onclick="showTab('list')">単語帳</button>
+  <button class="nav-btn" onclick="showTab('synonym')">類語</button>
   <button class="nav-btn" onclick="showTab('playlists')">リスト</button>
   <button class="nav-btn" onclick="showTab('tracker')">記録</button>
 </div>
@@ -262,6 +317,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;ba
       <button class="filter-chip" data-exam="gre" onclick="toggleChip(this,'exam')">GRE</button>
       <button class="filter-chip" data-exam="toefl1" onclick="toggleChip(this,'exam')">TOEFL頻出</button>
       <button class="filter-chip" data-exam="toefl2" onclick="toggleChip(this,'exam')">TOEFL S/W</button>
+      <button class="filter-chip" data-exam="verb" onclick="toggleChip(this,'exam')">主題動詞</button>
       <button class="filter-chip" data-exam="custom" onclick="toggleChip(this,'exam')">マイ単語</button>
       <button class="filter-chip" data-exam="starred" onclick="toggleChip(this,'exam')">★スター</button>
     </div>
@@ -305,7 +361,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;ba
     </div>
 
     <div class="mode-card-count" id="pool-count">対象: -語</div>
-    <button class="start-btn" id="start-btn" onclick="startFiltered()">このモードで始める</button>
+    <div style="display:flex;gap:10px;margin-top:4px;">
+      <button class="start-btn" id="start-btn" onclick="startFiltered()" style="flex:1;">テストで始める</button>
+      <button class="start-btn" onclick="startFlashcardFromMain()" style="flex:1;background:#34c759;">🃏 カードで始める</button>
+    </div>
   </div>
 
   <!-- タイムアタックモード -->
@@ -398,6 +457,41 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;ba
     <button class="r-btn" style="background:#007aff;color:#fff;" onclick="showTab('home')">ホームに戻る</button>
     <button class="r-btn" style="background:#34c759;color:#fff;" onclick="showTab('tracker')">記録を確認 →</button>
   </div>
+
+  <!-- フラッシュカード -->
+  <div id="fc-wrap">
+    <div class="fc-stat" style="padding:0 16px;margin-top:4px;">
+      <div class="fc-stat-item"><div class="fc-stat-num" id="fc-ok-count" style="color:#34c759;">0</div><div class="fc-stat-lbl">わかった</div></div>
+      <div class="fc-stat-item"><div class="fc-stat-num" id="fc-ng-count" style="color:#ff3b30;">0</div><div class="fc-stat-lbl">わからない</div></div>
+      <div class="fc-stat-item"><div class="fc-stat-num" id="fc-pct" style="color:#007aff;">—</div><div class="fc-stat-lbl">正解率</div></div>
+    </div>
+    <div class="fc-card" id="fc-card" onclick="fcFlip()">
+      <div id="fc-front">
+        <div class="fc-word" id="fc-word"></div>
+        <div class="fc-hint">タップして意味を確認</div>
+      </div>
+      <div class="fc-back" id="fc-back">
+        <div class="fc-meaning" id="fc-meaning"></div>
+        <div class="fc-etym" id="fc-etym" style="display:none;"></div>
+      </div>
+    </div>
+    <div class="fc-actions" id="fc-actions" style="display:none;">
+      <button class="fc-btn fc-btn-ng" onclick="fcAnswer(false)">✗ わからない</button>
+      <button class="fc-btn fc-btn-ok" onclick="fcAnswer(true)">✓ わかった</button>
+    </div>
+    <div id="fc-result">
+      <div style="font-size:48px;margin-bottom:8px;" id="fc-r-emoji">🎉</div>
+      <div class="fc-result-title" id="fc-r-title"></div>
+      <div class="fc-result-sub" id="fc-r-sub"></div>
+      <div class="fc-stat" style="margin:16px 0;">
+        <div class="fc-stat-item"><div class="fc-stat-num" style="color:#34c759;" id="fc-r-ok"></div><div class="fc-stat-lbl">わかった</div></div>
+        <div class="fc-stat-item"><div class="fc-stat-num" style="color:#ff3b30;" id="fc-r-ng"></div><div class="fc-stat-lbl">わからない</div></div>
+      </div>
+      <button class="fc-retry-btn fc-retry-ng" id="fc-retry-ng-btn" onclick="fcRetryNG()" style="display:none;">✗ わからないものだけ再挑戦</button>
+      <button class="fc-retry-btn" onclick="startFlashcardFromMain()">🔄 もう一度（全部）</button>
+      <button class="fc-retry-btn" style="background:#8e8e93;" onclick="showTab('home')">ホームに戻る</button>
+    </div>
+  </div>
 </div>
 
 <!-- WORD LIST -->
@@ -407,6 +501,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;ba
     <button class="filter-chip" data-listexam="gre" onclick="toggleListExam(this)">GRE</button>
     <button class="filter-chip" data-listexam="toefl1" onclick="toggleListExam(this)">TOEFL頻出</button>
     <button class="filter-chip" data-listexam="toefl2" onclick="toggleListExam(this)">TOEFL S/W</button>
+    <button class="filter-chip" data-listexam="verb" onclick="toggleListExam(this)">主題動詞</button>
     <button class="filter-chip" data-listexam="custom" onclick="toggleListExam(this)" style="margin-left:auto;">マイ単語</button>
   </div>
   <div id="list-star-chips">
@@ -487,6 +582,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;ba
 </div>
 
 <!-- PLAYLISTS SCREEN -->
+<div id="synonym" class="screen">
+  <div class="section-title">類語グループ</div>
+  <div style="padding:0 16px 8px;">
+    <input id="synonym-search" type="search" placeholder="単語・テーマで検索..." oninput="renderSynonym()"
+      style="width:100%;box-sizing:border-box;padding:8px 12px;border-radius:10px;border:1px solid #c7c7cc;font-size:14px;background:#f2f2f7;">
+  </div>
+  <div style="padding:0 16px 8px;display:flex;gap:6px;flex-wrap:wrap;" id="syn-cat-chips"></div>
+  <div id="synonym-list" style="padding:0 16px 16px;"></div>
+</div>
+
 <div id="playlists" class="screen">
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
     <div style="font-size:20px;font-weight:700;color:#1c1c1e;">🎵 マイリスト</div>
@@ -525,6 +630,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;ba
       <option value="gre">GRE</option>
       <option value="toefl1">TOEFL頻出</option>
       <option value="toefl2">TOEFL S/W</option>
+      <option value="verb">主題動詞</option>
       <option value="custom">マイ単語</option>
     </select>
     <div class="form-row">
@@ -593,6 +699,54 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;ba
 // ================================================================
 // TOEFL2 WORDS (S/W対策) — new vocabulary
 // ================================================================
+
+// ================================================================
+// SUBJECT VERBS (主題動詞) - 客観・一発切り のみ意味付き
+// ================================================================
+var VERB_WORDS = (function(){
+  var objective = [
+    {word:"apply",meaning:"適用する・応用する"},
+    {word:"classify",meaning:"分類する・区分する"},
+    {word:"combine",meaning:"結合する・組み合わせる"},
+    {word:"compare",meaning:"比較する・対照する"},
+    {word:"contrast",meaning:"対比する・対照させる"},
+    {word:"differentiate",meaning:"区別する・差異化する"},
+    {word:"distinguish",meaning:"区別する・見分ける"},
+    {word:"enumerate",meaning:"列挙する・数え上げる"},
+    {word:"give reasons for",meaning:"理由を述べる"},
+    {word:"illustrate",meaning:"説明する・例示する"},
+    {word:"introduce",meaning:"紹介する・導入する"},
+    {word:"report",meaning:"報告する・述べる"},
+    {word:"simulate",meaning:"模擬する・シミュレートする"},
+    {word:"summarize",meaning:"要約する・まとめる"},
+    {word:"survey",meaning:"概観する・調査する"},
+  ];
+  var subjobj = [
+    "account for","analyze","consider","describe","discuss","examine",
+    "explain","explore","identify","indicate","outline","point out",
+    "present","provide","review","show"
+  ];
+  var decisive = [
+    {word:"chronicle",meaning:"記録する・年代順に記述する"},
+    {word:"confirm",meaning:"確認する・裏付ける"},
+    {word:"define",meaning:"定義する・明確にする"},
+    {word:"demonstrate",meaning:"実証する・論証する"},
+    {word:"dissolve",meaning:"解消する・溶解する"},
+    {word:"establish",meaning:"確立する・立証する"},
+    {word:"prove",meaning:"証明する・立証する"},
+    {word:"reconcile",meaning:"和解させる・調和させる"},
+    {word:"resolve",meaning:"解決する・決意する"},
+    {word:"settle",meaning:"解決する・落ち着かせる"},
+    {word:"synthesize",meaning:"統合する・合成する"},
+    {word:"trace",meaning:"追跡する・由来を辿る"},
+  ];
+  var result = [];
+  objective.forEach(function(w){ result.push({word:w.word, meaning:w.meaning, etymology:"", tag:"verb", subcat:"客観"}); });
+  subjobj.forEach(function(w){ result.push({word:w, meaning:"", etymology:"", tag:"verb", subcat:"主観客観"}); });
+  decisive.forEach(function(w){ result.push({word:w.word, meaning:w.meaning, etymology:"", tag:"verb", subcat:"一発切り"}); });
+  return result;
+})();
+
 var TOEFL2_NEW = (function(){
   var verbs = ["shape","navigate","develop","examine","identify","engage","accumulate","generate","refine","strengthen","recognize","accelerate","support","sustain","enable","facilitate","cultivate","expand","honor","establish","elevate","reinforce","persist","abandon","undermine","compromise","nurture","transform","compound","aspire","integrate","disrupt","allocate"];
   var phrases = ["shapes everything","navigate the complexities of","develop a genuine sense of","examine challenges with precision","identify constructive pathways forward","engage with adversity","accumulate success experiences","generate deeper insight","refine self-perception","strengthen one's capacity for","recognize one's own progress","accelerate personal development","support continuous improvement","sustain overall confidence","enable individuals to","facilitate authentic interaction","engage with alternative viewpoints","cultivate adaptability","expand interpersonal awareness","honor commitments to oneself","set goals and follow through","establish a self-reinforcing cycle","elevate psychological performance","reinforce long-term consistency","sustain effort and perseverance","abandon meaningful pursuits","undermine one's own potential","compromise long-term fulfillment","nurture self-worth","transform how societies function","shape the trajectory of","collapse under pressure","aspire to be","supports rather than disrupts","have the potential to transform"];
@@ -663,7 +817,7 @@ function save(key, val){ localStorage.setItem(key, JSON.stringify(val)); }
 // BUILD ALL_WORDS
 // ================================================================
 function buildAllWords(){
-  var base = GRE_WORDS.concat(TOEFL1_WORDS).concat(TOEFL2_NEW);
+  var base = GRE_WORDS.concat(TOEFL1_WORDS).concat(TOEFL2_NEW).concat(VERB_WORDS);
   var cw = customWords.map(function(v){ return Object.assign({}, v, {isCustom:true}); });
   return base.concat(cw);
 }
@@ -719,20 +873,223 @@ function showTab(t){
   document.querySelectorAll(".nav-btn").forEach(function(b){b.classList.remove("active");});
   var el = document.getElementById(t);
   if(el) el.classList.add("active");
-  var tabs=["home","quiz","list","playlists","tracker"];
+  var tabs=["home","quiz","list","synonym","playlists","tracker"];
   var idx=tabs.indexOf(t);
   if(idx>=0) document.querySelectorAll(".nav-btn")[idx].classList.add("active");
   var fab=document.getElementById("fab-add");
   fab.classList.toggle("visible", t==="list");
+  if(t!=="quiz"){
+    document.getElementById("fc-wrap").style.display = "none";
+  }
   if(t==="list") filterList();
   if(t==="home"){ updatePoolCount(); renderPlHome(); }
   if(t==="tracker") renderTracker();
   if(t==="playlists") renderPlaylists();
+  if(t==="synonym") renderSynonym();
 }
 
 // ================================================================
-// CHIP HELPERS
+// SYNONYM GROUPS DATA
 // ================================================================
+var SYNONYM_MEANINGS = {
+  "eulogize":"称賛する・弔辞を述べる","laud":"称賛する・賛美する","extol":"絶賛する・褒めたたえる","commend":"称賛する・推薦する","acclaim":"称賛・喝采","lionize":"もてはやす・崇拝する",
+  "censure":"非難する・叱責","castigate":"厳しく罰する・叱責する","excoriate":"厳しく批判する・皮をはぐ","upbraid":"叱責する・責める","berate":"激しく叱る","vituperate":"激しく罵倒する","scathe":"厳しく批判する","lambaste":"激しく非難する",
+  "disparage":"けなす・見くびる","denigrate":"貶める・中傷する","belittle":"軽視する・けなす","deprecate":"非難する・反対を表明する","deride":"嘲笑する","decry":"公然と非難する","discredit":"信用を傷つける","impugn":"異議を唱える・攻撃する",
+  "adulate":"過度に称賛する","sycophantic":"こびへつらう","fawn":"媚びへつらう","flatter":"おべっかを使う","toady":"こびへつらう人・追従する",
+  "dissemble":"本心を隠す・偽る","feign":"ふりをする・装う","dissimulate":"隠す・偽装する","obfuscate":"曖昧にする・煙に巻く","equivocate":"言葉を濁す・あいまいに言う",
+  "prevaricate":"言い逃れをする・ごまかす","hedge":"言葉を濁す・リスクを回避する","temporize":"時間稼ぎをする","palter":"ごまかす・いい加減に扱う",
+  "mendacious":"嘘をつく・虚偽の","perfidious":"裏切りの・不誠実な","duplicitous":"二枚舌の・欺瞞的な","deceitful":"欺く・不正直な","disingenuous":"不誠実な・打算的な",
+  "specious":"もっともらしい・見かけ倒しの","spurious":"偽りの・真正でない","bogus":"偽物の・インチキな","counterfeit":"偽造の・模造品","meretricious":"見かけだけ魅力的な・けばけばしい",
+  "inimical":"有害な・敵対的な","antagonistic":"敵対的な・対立する","hostile":"敵対的な・敵意のある","belligerent":"好戦的な・攻撃的な",
+  "pugnacious":"好戦的な・けんか好きな","bellicose":"好戦的な・戦争好きな","truculent":"凶暴な・攻撃的な","combative":"好戦的な・論争好きな","contentious":"論争好きな・議論を引き起こす",
+  "acrimonious":"辛辣な・根深い苦々しさ","caustic":"辛辣な・腐食性の","vitriolic":"辛辣な・痛烈な","mordant":"痛烈な・辛辣な","acerbic":"辛辣な・厳しい","scathing":"手厳しい・痛烈な","trenchant":"鋭い・辛辣な",
+  "placate":"なだめる・宥める","mollify":"なだめる・和らげる","appease":"なだめる・慰める","conciliate":"和解させる・宥和する","propitiate":"なだめる・機嫌をとる","pacify":"なだめる・鎮める","assuage":"和らげる・鎮める",
+  "pacific":"平和的な・穏やかな","irenic":"平和的な・平和を好む","amicable":"友好的な・和やかな","peaceable":"平和的な・穏やかな",
+  "equanimous":"平静な・落ち着いた","imperturbable":"動じない・冷静な","stoic":"禁欲的な・感情を表さない","phlegmatic":"冷静な・無気力な","dispassionate":"冷静な・感情を交えない","placid":"穏やかな・平静な",
+  "frugal":"倹約的な・質素な","parsimonious":"過度に倹約な・けちな","penurious":"極貧の・けちな","miserly":"けちな・吝嗇な","niggardly":"けちな・わずかな","stingy":"けちな・出し惜しみする","avaricious":"強欲な・貪欲な",
+  "profligate":"放蕩な・浪費する","prodigal":"浪費的な・放蕩な","extravagant":"派手な・贅沢な","spendthrift":"浪費家・金遣いが荒い","dissolute":"放蕩な・不道徳な",
+  "munificent":"非常に気前のよい・寛大な","lavish":"気前のよい・惜しみない","bountiful":"豊富な・気前のよい","magnanimous":"寛大な・度量のある","beneficent":"慈善的な・善行を行う",
+  "sagacious":"賢明な・洞察力のある","perspicacious":"洞察力のある・物事を見通す","astute":"機敏な・抜け目ない","shrewd":"抜け目ない・ずる賢い","discerning":"識別力のある・眼識のある","judicious":"賢明な・思慮深い","prudent":"慎重な・賢明な","prescient":"先見の明がある","canny":"抜け目ない・慎重な",
+  "obtuse":"鈍い・鈍感な","vacuous":"空虚な・無意味な","fatuous":"愚かな・頓馬な","inane":"空虚な・無意味な","vapid":"無味乾燥な・活気のない","stolid":"無感動な・感情を示さない",
+  "ingenious":"独創的な・巧妙な","adroit":"巧みな・機敏な","dexterous":"器用な・巧みな","deft":"器用な・巧みな","artful":"巧みな・狡猾な",
+  "credulous":"信じやすい・だまされやすい","gullible":"だまされやすい","naive":"世間知らずな・純真な",
+  "tractable":"従順な・扱いやすい","docile":"従順な・素直な","compliant":"従順な・規則に従う","amenable":"従順な・素直な","acquiescent":"黙認する・おとなしく従う","submissive":"従順な・服従する","pliable":"しなやかな・影響を受けやすい","malleable":"柔軟な・鍛えやすい",
+  "intractable":"手に負えない・頑固な","recalcitrant":"反抗的な・頑固に従わない","refractory":"頑固な・手に負えない","obstinate":"強情な・頑固な","contumacious":"反抗的な・不従順な","obdurate":"頑固な・悔い改めない","unruly":"手に負えない・乱暴な","wayward":"気まぐれな・反抗的な",
+  "obsequious":"卑屈な・こびへつらう","servile":"卑屈な・奴隷的な","subservient":"卑屈な・従属的な","fawning":"媚びへつらう・おべっかを使う",
+  "ephemeral":"一時的な・はかない","transient":"一時的な・通り過ぎる","fleeting":"束の間の・はかない","evanescent":"儚い・すぐ消える","transitory":"一時的な・短命な",
+  "perennial":"永続的な・多年生の","perpetual":"永続的な・絶え間ない","enduring":"持続する・耐える","immutable":"変わらない・不変の","indelible":"消えない・永続的な","inveterate":"根深い・長年の",
+  "intermittent":"断続的な・時々起こる","sporadic":"散発的な・不規則な","fitful":"断続的な・気まぐれな","erratic":"気まぐれな・不規則な","desultory":"散漫な・行き当たりばったりの",
+  "incessant":"絶え間ない・途切れない","unremitting":"絶え間ない・容赦ない","relentless":"容赦ない・執拗な","ceaseless":"絶え間ない","persistent":"執拗な・持続的な",
+  "augment":"増大する・増やす","amplify":"増幅する・拡大する","aggrandize":"誇大にする・地位を高める","burgeon":"急成長する・芽吹く","proliferate":"急増する・増殖する","bolster":"支える・強化する",
+  "diminish":"減らす・小さくする","attenuate":"弱める・希薄にする","mitigate":"和らげる・軽減する","alleviate":"和らげる・軽減する","palliate":"緩和する・一時しのぎにする","abate":"弱まる・減少する",
+  "dwindle":"縮小する・減少する","wane":"衰える・弱まる","ebb":"退く・衰退する","languish":"衰弱する・元気をなくす","deteriorate":"悪化する・劣化する","recede":"後退する・遠ざかる",
+  "espouse":"支持する・採用する","advocate":"支持する・主張する","champion":"擁護する・支持する","endorse":"承認する・支持する","sanction":"承認する・制裁","uphold":"支持する・維持する","promulgate":"公布する・広める",
+  "gainsay":"否定する・反論する","refute":"反論する・論駁する","rebut":"反論する","repudiate":"拒絶する・否定する","contradict":"矛盾する・否定する","disclaim":"否定する・放棄する",
+  "denounce":"非難する・告発する","decry":"公然と非難する","inveigh":"激しく非難する","condemn":"非難する・有罪とする",
+  "obfuscate":"曖昧にする・煙に巻く","obscure":"曖昧にする・不明瞭な","muddle":"混乱させる・混乱した状態","confound":"混乱させる・困惑させる","mystify":"不思議がらせる","perplex":"当惑させる",
+  "elucidate":"明確にする・解明する","explicate":"詳しく説明する","expound":"詳説する","illuminate":"照らす・明確にする","articulate":"明確に表現する","delineate":"描写する・輪郭を描く",
+  "convoluted":"複雑に絡み合った・難解な","abstruse":"難解な・難しい","recondite":"難解な・秘義的な","arcane":"秘教的な・難解な","esoteric":"難解な・秘教的な","opaque":"不透明な・理解しにくい","cryptic":"謎めいた・不可解な",
+  "pellucid":"透明な・明快な","lucid":"明快な・澄んだ","limpid":"澄んだ・透明な","transparent":"透明な・明白な","coherent":"一貫した・明晰な","cogent":"説得力のある・論理的な",
+  "apathetic":"無気力な・無関心な","indifferent":"無関心な・平凡な","nonchalant":"無頓着な・平然とした","impassive":"感情を見せない・冷静な","aloof":"超然とした・よそよそしい",
+  "fervent":"熱心な・情熱的な","zealous":"熱心な・熱狂的な","ardent":"熱烈な・情熱的な","avid":"熱心な・貪欲な","vehement":"激烈な・強烈な","fervid":"熱烈な・情熱的な","ebullient":"元気溌溂とした",
+  "melancholy":"憂鬱・悲しみ","doleful":"悲しげな・憂鬱な","lugubrious":"悲嘆に暮れた・大げさに陰鬱な","despondent":"意気消沈した・絶望的な","elegiac":"哀愁の・悲歌的な",
+  "sanguine":"楽観的な・希望に満ちた","buoyant":"快活な・楽観的な","blithe":"のんきな・無頓着な",
+  "verbose":"冗長な・言葉の多すぎる","prolix":"冗長な・くどい","loquacious":"おしゃべりな・多弁な","garrulous":"おしゃべりな・多弁な","turgid":"膨れた・誇張した","bombastic":"大げさな・誇張した",
+  "succinct":"簡潔な・手短な","laconic":"簡潔な・無口な","terse":"簡潔な・ぶっきらぼうな","concise":"簡潔な・要領を得た","pithy":"簡潔で要を得た・力強い",
+  "grandiloquent":"大げさな・誇張した","florid":"華美すぎる・過剰に装飾された","histrionic":"大げさな・芝居がかった",
+  "scrupulous":"良心的な・細心の","probity":"高潔さ・誠実さ","rectitude":"正直さ・道徳的な正しさ","steadfast":"不動の・揺るぎない","upright":"正直な・誠実な",
+  "nefarious":"邪悪な・極悪の","reprehensible":"非難すべき・けしからぬ","despicable":"卑劣な・唾棄すべき","treacherous":"裏切りの・危険な",
+  "rapacious":"強欲な・略奪する","venal":"賄賂に動く・腐敗した","acquisitive":"物欲の強い・貪欲な",
+  "ingenuous":"純真な・無邪気な","flout":"無視する・規則を破る","flaunt":"見せびらかす・誇示する","enervate":"気力を奪う・衰弱させる","energize":"活力を与える・元気づける","depreciate":"価値を下げる・軽視する","militate":"影響を及ぼす（against）","complement":"補完する・引き立てる","compliment":"称賛する・褒める","elicit":"引き出す・誘い出す","illicit":"不法な・違法の","uninterested":"興味のない","reluctant":"気が進まない・しぶしぶ","infer":"推論する・推察する",
+};
+
+var SYNONYM_GROUPS = [
+  {category:"称賛・批判系",theme:"称賛する",words:["eulogize","laud","extol","commend","acclaim","lionize"]},
+  {category:"称賛・批判系",theme:"厳しく批判する",words:["censure","castigate","excoriate","upbraid","berate","vituperate","scathe","lambaste"]},
+  {category:"称賛・批判系",theme:"けなす・軽蔑する",words:["disparage","denigrate","belittle","deprecate","deride","decry","discredit","impugn"]},
+  {category:"称賛・批判系",theme:"過度に称賛する・こびる",words:["adulate","sycophantic","fawn","flatter","toady"]},
+  {category:"欺く・ごまかす系",theme:"本心を隠す・偽る",words:["dissemble","feign","dissimulate","obfuscate","equivocate"]},
+  {category:"欺く・ごまかす系",theme:"言葉を濁す",words:["prevaricate","equivocate","hedge","temporize","palter"]},
+  {category:"欺く・ごまかす系",theme:"嘘をつく・不誠実な",words:["mendacious","perfidious","duplicitous","deceitful","disingenuous"]},
+  {category:"欺く・ごまかす系",theme:"見かけ倒しの・偽の",words:["specious","spurious","bogus","counterfeit","meretricious"]},
+  {category:"怒り・敵意系",theme:"敵対的な",words:["inimical","antagonistic","hostile","belligerent"]},
+  {category:"怒り・敵意系",theme:"好戦的な",words:["belligerent","pugnacious","bellicose","truculent","combative","contentious"]},
+  {category:"怒り・敵意系",theme:"辛辣な・痛烈な",words:["acrimonious","caustic","vitriolic","mordant","acerbic","scathing","trenchant"]},
+  {category:"穏やか・和解系",theme:"なだめる・鎮める",words:["placate","mollify","appease","conciliate","propitiate","pacify","assuage"]},
+  {category:"穏やか・和解系",theme:"平和的な",words:["pacific","irenic","conciliatory","amicable","peaceable"]},
+  {category:"穏やか・和解系",theme:"平静な",words:["equanimous","imperturbable","stoic","phlegmatic","dispassionate","placid"]},
+  {category:"倹約・浪費系",theme:"倹約な・けちな",words:["frugal","parsimonious","penurious","miserly","niggardly","stingy","avaricious"]},
+  {category:"倹約・浪費系",theme:"浪費する・放蕩な",words:["profligate","prodigal","extravagant","spendthrift","dissolute"]},
+  {category:"倹約・浪費系",theme:"気前のよい",words:["munificent","lavish","bountiful","magnanimous","beneficent"]},
+  {category:"賢い・愚かな系",theme:"洞察力のある・賢明な",words:["sagacious","perspicacious","astute","shrewd","discerning","judicious","prudent","prescient","canny"]},
+  {category:"賢い・愚かな系",theme:"鈍い・愚かな",words:["obtuse","vacuous","fatuous","inane","vapid","stolid"]},
+  {category:"賢い・愚かな系",theme:"巧みな・独創的な",words:["ingenious","adroit","dexterous","deft","artful"]},
+  {category:"賢い・愚かな系",theme:"だまされやすい",words:["credulous","gullible","naive"]},
+  {category:"従順・反抗系",theme:"従順な",words:["tractable","docile","compliant","amenable","acquiescent","submissive","pliable","malleable"]},
+  {category:"従順・反抗系",theme:"反抗的な・手に負えない",words:["intractable","recalcitrant","refractory","obstinate","contumacious","obdurate","unruly","wayward"]},
+  {category:"従順・反抗系",theme:"卑屈なほど従順な",words:["obsequious","servile","subservient","fawning","sycophantic"]},
+  {category:"一時的・永続的系",theme:"一時的な・はかない",words:["ephemeral","transient","fleeting","evanescent","transitory"]},
+  {category:"一時的・永続的系",theme:"永続的な",words:["perennial","perpetual","enduring","immutable","indelible","inveterate"]},
+  {category:"一時的・永続的系",theme:"断続的な",words:["intermittent","sporadic","fitful","erratic","desultory"]},
+  {category:"一時的・永続的系",theme:"絶え間ない",words:["incessant","unremitting","relentless","ceaseless","persistent"]},
+  {category:"増やす・減らす系",theme:"増やす・強める",words:["augment","amplify","aggrandize","burgeon","proliferate","bolster"]},
+  {category:"増やす・減らす系",theme:"減らす・和らげる",words:["diminish","attenuate","mitigate","alleviate","palliate","assuage","abate","mollify"]},
+  {category:"増やす・減らす系",theme:"衰える・消える",words:["dwindle","wane","ebb","languish","deteriorate","recede"]},
+  {category:"支持・反対系",theme:"支持する",words:["espouse","advocate","champion","endorse","sanction","uphold","promulgate"]},
+  {category:"支持・反対系",theme:"反論する・否定する",words:["gainsay","refute","rebut","repudiate","contradict","impugn","disclaim"]},
+  {category:"支持・反対系",theme:"非難する",words:["denounce","decry","inveigh","censure","condemn","deprecate","excoriate"]},
+  {category:"混乱・明確系",theme:"曖昧にする",words:["obfuscate","obscure","muddle","confound","mystify","perplex"]},
+  {category:"混乱・明確系",theme:"明確にする・説明する",words:["elucidate","explicate","expound","illuminate","articulate","delineate"]},
+  {category:"混乱・明確系",theme:"難解な",words:["convoluted","abstruse","recondite","arcane","esoteric","opaque","cryptic"]},
+  {category:"混乱・明確系",theme:"明晰な",words:["pellucid","lucid","limpid","transparent","coherent","cogent"]},
+  {category:"感情・態度系",theme:"無関心な",words:["apathetic","indifferent","dispassionate","nonchalant","phlegmatic","impassive","aloof"]},
+  {category:"感情・態度系",theme:"熱烈な・情熱的な",words:["fervent","zealous","ardent","avid","vehement","fervid","ebullient"]},
+  {category:"感情・態度系",theme:"悲しい・憂鬱な",words:["melancholy","doleful","lugubrious","despondent","elegiac"]},
+  {category:"感情・態度系",theme:"楽観的な",words:["sanguine","buoyant","blithe"]},
+  {category:"言語・表現系",theme:"冗長な",words:["verbose","prolix","loquacious","garrulous","long-winded","turgid","bombastic"]},
+  {category:"言語・表現系",theme:"簡潔な",words:["succinct","laconic","terse","concise","pithy"]},
+  {category:"言語・表現系",theme:"大げさな",words:["grandiloquent","bombastic","florid","histrionic"]},
+  {category:"道徳・倫理系",theme:"高潔な・誠実な",words:["scrupulous","probity","rectitude","steadfast","upright"]},
+  {category:"道徳・倫理系",theme:"不正直な・卑劣な",words:["nefarious","reprehensible","despicable","perfidious","treacherous","duplicitous"]},
+  {category:"道徳・倫理系",theme:"強欲な",words:["avaricious","rapacious","venal","acquisitive"]},
+  {category:"混同しやすいペア",theme:"紛らわしい類似語",words:["ingenious","ingenuous","flout","flaunt","enervate","energize","deprecate","depreciate","mitigate","militate","affect","complement","compliment","elicit","illicit","disinterested","uninterested","reticent","reluctant","imply","infer"]},
+];
+
+// ================================================================
+// SYNONYM RENDER
+// ================================================================
+var synActiveCat = "all";
+
+function renderSynonym(){
+  var query = (document.getElementById("synonym-search").value||"").toLowerCase().trim();
+  var ALL = buildAllWords();
+  var dbSet = {};
+  ALL.forEach(function(w){ dbSet[w.word] = w.meaning||""; });
+
+  // カテゴリチップ
+  var catChips = document.getElementById("syn-cat-chips");
+  if(!catChips.children.length){
+    var cats = ["all"].concat([...new Set(SYNONYM_GROUPS.map(function(g){return g.category;}))]);
+    cats.forEach(function(cat){
+      var btn = document.createElement("button");
+      btn.className = "filter-chip" + (cat===synActiveCat?" selected":"");
+      btn.textContent = cat==="all"?"すべて":cat;
+      btn.onclick = function(){ synActiveCat=cat; document.querySelectorAll("#syn-cat-chips .filter-chip").forEach(function(b){b.classList.remove("selected");}); btn.classList.add("selected"); renderSynonym(); };
+      catChips.appendChild(btn);
+    });
+  }
+
+  var container = document.getElementById("synonym-list");
+  container.innerHTML = "";
+
+  var groups = SYNONYM_GROUPS.filter(function(g){
+    if(synActiveCat!=="all" && g.category!==synActiveCat) return false;
+    if(query){
+      return g.theme.toLowerCase().includes(query) ||
+             g.category.toLowerCase().includes(query) ||
+             g.words.some(function(w){
+               return w.toLowerCase().includes(query) ||
+                      (dbSet[w]||"").toLowerCase().includes(query);
+             });
+    }
+    return true;
+  });
+
+  if(!groups.length){
+    container.innerHTML='<div style="text-align:center;color:#8e8e93;padding:40px 0;">見つかりませんでした</div>';
+    return;
+  }
+
+  // カテゴリごとにグループ化して表示
+  var catsSeen = {};
+  groups.forEach(function(g){
+    if(!catsSeen[g.category]){
+      catsSeen[g.category] = true;
+      var hdr = document.createElement("div");
+      hdr.className = "syn-category-header";
+      hdr.textContent = g.category;
+      container.appendChild(hdr);
+    }
+
+    var grpEl = document.createElement("div");
+    grpEl.className = "syn-group";
+
+    // グループ内で単語帳にある語の数
+    var inDbCount = g.words.filter(function(w){ return dbSet.hasOwnProperty(w); }).length;
+
+    var hdrEl = document.createElement("div");
+    hdrEl.className = "syn-group-header";
+    hdrEl.innerHTML =
+      '<span class="syn-group-theme">' + g.theme + '</span>' +
+      '<span style="display:flex;align-items:center;gap:4px;">' +
+        '<span class="syn-group-count">' + inDbCount + '/' + g.words.length + '語</span>' +
+        '<span class="syn-group-arrow">▶</span>' +
+      '</span>';
+    hdrEl.onclick = function(){ grpEl.classList.toggle("open"); };
+
+    var bodyEl = document.createElement("div");
+    bodyEl.className = "syn-group-body";
+
+    g.words.forEach(function(word){
+      var inDb = dbSet.hasOwnProperty(word);
+      var meaning = dbSet[word] || SYNONYM_MEANINGS[word] || "—";
+      var row = document.createElement("div");
+      row.className = "syn-word-row";
+      row.innerHTML =
+        '<span class="syn-word ' + (inDb?"in-db":"not-db") + '">' + word + '</span>' +
+        '<span class="syn-meaning">' + meaning + '</span>' +
+        (inDb ? '<span class="syn-db-badge">単語帳</span>' : '');
+      bodyEl.appendChild(row);
+    });
+
+    grpEl.appendChild(hdrEl);
+    grpEl.appendChild(bodyEl);
+    container.appendChild(grpEl);
+
+    // 検索時は自動展開
+    if(query) grpEl.classList.add("open");
+  });
+}
 function toggleChip(el,group){
   document.getElementById(group+"-chips").querySelectorAll(".filter-chip").forEach(function(c){c.classList.remove("selected");});
   el.classList.add("selected");
@@ -1185,6 +1542,201 @@ function getTaBest(exam){
   var filtered = taRecords.filter(function(r){ return (exam==="all")||r.exam===exam; });
   if(!filtered.length) return null;
   return filtered.reduce(function(a,b){ return a.score>=b.score?a:b; });
+}
+
+// ================================================================
+// FLASHCARD MODE
+// ================================================================
+var fcDeck = [];
+var fcIndex = 0;
+var fcOK = 0;
+var fcNG = 0;
+var fcNGWords = [];
+var fcFlipped = false;
+
+// ================================================================
+// QUIZ MODE SWITCHER
+// ================================================================
+var currentQuizMode = 'quiz';
+
+function switchQuizMode(mode){
+  currentQuizMode = mode;
+  var qBtn = document.getElementById("qmode-btn-quiz");
+  var fBtn = document.getElementById("qmode-btn-flash");
+  if(mode === 'quiz'){
+    qBtn.style.background = "#007aff"; qBtn.style.color = "#fff";
+    fBtn.style.background = "transparent"; fBtn.style.color = "#007aff";
+    document.getElementById("fc-wrap").style.display = "none";
+    document.getElementById("q-card").style.display = "";
+    document.getElementById("bar-wrap").style.display = "block";
+    document.getElementById("sc-lbl").style.display = "block";
+  } else {
+    fBtn.style.background = "#007aff"; fBtn.style.color = "#fff";
+    qBtn.style.background = "transparent"; qBtn.style.color = "#007aff";
+    document.getElementById("q-card").style.display = "none";
+    document.getElementById("result-wrap").style.display = "none";
+    document.getElementById("ta-result-wrap").style.display = "none";
+    startFlashcardFromMain();
+  }
+}
+
+// メインカードの設定を引き継いでフラッシュカード開始
+function startFlashcardFromMain(){
+  var pool = buildPool(); // メインカードのフィルター設定をそのまま使用
+  if(!pool.length){ alert("対象の単語がありません。"); return; }
+  var count = parseInt(getSelected("count-chips","count")||"20");
+  fcDeck = shuffle(pool);
+  if(count > 0) fcDeck = fcDeck.slice(0, count);
+  fcIndex = 0; fcOK = 0; fcNG = 0; fcNGWords = []; fcFlipped = false;
+
+  // UI切り替え
+  document.getElementById("q-card").style.display = "none";
+  document.getElementById("result-wrap").style.display = "none";
+  document.getElementById("ta-result-wrap").style.display = "none";
+  document.getElementById("ta-timer-wrap").style.display = "none";
+  document.getElementById("fc-result").style.display = "none";
+  document.getElementById("fc-wrap").style.display = "block";
+  document.getElementById("bar-wrap").style.display = "block";
+  document.getElementById("sc-lbl").style.display = "block";
+
+  showTab("quiz");
+  startCountdown(function(){ fcRender(); });
+}
+
+function startFlashcard(){
+  var exam = getSelected("fc-exam-chips","exam") || "all";
+  var countVal = parseInt(getSelected("fc-count-chips","fccount")||"20");
+  var filter = getSelected("fc-filter-chips","fcfilter") || "all";
+  var ALL = buildAllWords();
+  var pool = ALL.filter(function(v){
+    if(exam!=="all" && v.tag!==exam) return false;
+    if(!v.meaning || v.meaning === "") return false;
+    if(filter==="wrong") return wrongWords.indexOf(v.word) >= 0;
+    if(filter==="unseen"){
+      var s = vocabStats[v.word];
+      return !s || (s.correct===0 && s.wrong===0);
+    }
+    return true;
+  });
+  if(pool.length < 1){
+    if(filter==="wrong") alert("苦手単語がありません。クイズモードで間違えた単語が登録されます。");
+    else if(filter==="unseen") alert("未挑戦の単語がありません。");
+    else alert("単語が見つかりません。");
+    return;
+  }
+  fcDeck = shuffle(pool);
+  if(countVal > 0) fcDeck = fcDeck.slice(0, countVal);
+  fcIndex = 0; fcOK = 0; fcNG = 0; fcNGWords = []; fcFlipped = false;
+
+  // UI切り替え
+  document.getElementById("q-card").style.display = "none";
+  document.getElementById("result-wrap").style.display = "none";
+  document.getElementById("ta-result-wrap").style.display = "none";
+  document.getElementById("ta-timer-wrap").style.display = "none";
+  document.getElementById("bar-wrap").style.display = "block";
+  document.getElementById("fc-result").style.display = "none";
+  document.getElementById("fc-wrap").style.display = "block";
+
+  // モードバーをフラッシュカードに切り替え
+  var qBtn = document.getElementById("qmode-btn-quiz");
+  var fBtn = document.getElementById("qmode-btn-flash");
+  if(qBtn && fBtn){
+    fBtn.style.background = "#007aff"; fBtn.style.color = "#fff";
+    qBtn.style.background = "transparent"; qBtn.style.color = "#007aff";
+  }
+
+  showTab("quiz");
+  startCountdown(function(){ fcRender(); });
+}
+
+function fcRender(){
+  if(fcIndex >= fcDeck.length){ fcShowResult(); return; }
+  fcFlipped = false;
+  var q = fcDeck[fcIndex];
+
+  // 表面
+  document.getElementById("fc-word").textContent = q.word;
+  document.getElementById("fc-front").style.display = "block";
+  document.getElementById("fc-back").style.display = "none";
+  document.getElementById("fc-actions").style.display = "none";
+
+  // 裏面セット（表示はしない）
+  document.getElementById("fc-meaning").textContent = q.meaning || "（意味未登録）";
+  var etymEl = document.getElementById("fc-etym");
+  if(q.etymology){ etymEl.textContent = q.etymology; etymEl.style.display = "block"; }
+  else { etymEl.style.display = "none"; }
+
+  // 共通進捗バー・ラベル（テストモードと同じUI）
+  var pct = fcDeck.length > 0 ? (fcIndex / fcDeck.length * 100) : 0;
+  document.getElementById("bar").style.width = pct + "%";
+  document.getElementById("bar-wrap").style.display = "block";
+  var answered = fcOK + fcNG;
+  var rate = answered > 0 ? Math.round(fcOK / answered * 100) : 0;
+  document.getElementById("sc-lbl").textContent =
+    (fcIndex+1) + " / " + fcDeck.length + "　✓ " + fcOK + "　✗ " + fcNG + (answered > 0 ? "　(" + rate + "%)" : "");
+  document.getElementById("sc-lbl").style.display = "block";
+
+  // カード統計
+  document.getElementById("fc-ok-count").textContent = fcOK;
+  document.getElementById("fc-ng-count").textContent = fcNG;
+  document.getElementById("fc-pct").textContent = answered > 0 ? rate + "%" : "—";
+}
+
+function fcFlip(){
+  if(fcFlipped) return;
+  fcFlipped = true;
+  document.getElementById("fc-front").style.display = "none";
+  document.getElementById("fc-back").style.display = "block";
+  document.getElementById("fc-actions").style.display = "flex";
+}
+
+function fcAnswer(ok){
+  var q = fcDeck[fcIndex];
+  if(ok){
+    fcOK++;
+    showSparkle();
+    wrongWords = wrongWords.filter(function(w){ return w !== q.word; });
+  } else {
+    fcNG++;
+    fcNGWords.push(q);
+    if(wrongWords.indexOf(q.word) < 0) wrongWords.push(q.word);
+  }
+  save(WRONG_KEY, wrongWords);
+  recordResult(q.word, ok);
+  fcIndex++;
+  fcRender();
+}
+
+function fcShowResult(){
+  document.getElementById("fc-actions").style.display = "none";
+  document.getElementById("fc-result").style.display = "block";
+
+  var total = fcDeck.length;
+  var rate = total > 0 ? Math.round(fcOK / total * 100) : 0;
+  var emoji = rate >= 80 ? "🎉" : rate >= 50 ? "💪" : "📚";
+  document.getElementById("fc-r-emoji").textContent = emoji;
+  document.getElementById("fc-r-title").textContent = rate + "% 正解";
+  document.getElementById("fc-r-sub").textContent = total + "枚中 " + fcOK + "枚わかった";
+  document.getElementById("fc-r-ok").textContent = fcOK;
+  document.getElementById("fc-r-ng").textContent = fcNG;
+
+  // 共通進捗バーを100%に
+  document.getElementById("bar").style.width = "100%";
+  document.getElementById("sc-lbl").textContent =
+    total + " / " + total + "　✓ " + fcOK + "　✗ " + fcNG + "　(" + rate + "%)";
+
+  var retryBtn = document.getElementById("fc-retry-ng-btn");
+  retryBtn.style.display = fcNGWords.length > 0 ? "inline-block" : "none";
+  if(fcNGWords.length > 0){
+    retryBtn.textContent = "✗ わからない " + fcNGWords.length + "語を再挑戦";
+  }
+}
+
+function fcRetryNG(){
+  fcDeck = shuffle(fcNGWords.slice());
+  fcIndex = 0; fcOK = 0; fcNG = 0; fcNGWords = []; fcFlipped = false;
+  document.getElementById("fc-result").style.display = "none";
+  fcRender();
 }
 
 function startTimeAttack(){
