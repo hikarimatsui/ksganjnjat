@@ -319,7 +319,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;ba
       <button class="filter-chip" data-exam="toefl2" onclick="toggleChip(this,'exam')">TOEFL S/W</button>
       <button class="filter-chip" data-exam="verb" onclick="toggleChip(this,'exam')">主題動詞</button>
       <button class="filter-chip" data-exam="custom" onclick="toggleChip(this,'exam')">マイ単語</button>
-      <button class="filter-chip" data-exam="starred" onclick="toggleChip(this,'exam')">★スター</button>
+    </div>
+
+    <div class="filter-row" id="star-chips" style="margin-top:6px;">
+      <button class="filter-chip selected" data-star="all" onclick="toggleChip(this,'star')">★ すべて</button>
+      <button class="filter-chip" data-star="starred" onclick="toggleChip(this,'star')">★ スターのみ</button>
     </div>
 
     <div class="mode-card-title" style="margin-top:14px;">出題形式</div>
@@ -429,6 +433,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;ba
     <div id="post-answer-bar" style="display:none;background:#f9fafb;border-radius:13px;padding:10px 14px;margin-bottom:10px;display:none;align-items:center;gap:8px;">
       <span id="post-word-label" style="font-size:13px;font-weight:600;color:#1c1c1e;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
       <button id="post-star-btn" onclick="togglePostStar()" style="background:#fff;border:1.5px solid #e5e5ea;border-radius:20px;padding:5px 12px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;-webkit-tap-highlight-color:transparent;">☆</button>
+      <button id="post-img-btn" onclick="searchWordImage()" style="background:#fff;border:1.5px solid #e5e5ea;border-radius:20px;padding:5px 12px;font-size:13px;font-weight:600;color:#636366;cursor:pointer;white-space:nowrap;-webkit-tap-highlight-color:transparent;">🔍</button>
       <button id="post-list-btn" onclick="openPostPlPopup()" style="background:#fff;border:1.5px solid #e5e5ea;border-radius:20px;padding:5px 12px;font-size:13px;font-weight:600;color:#007aff;cursor:pointer;white-space:nowrap;-webkit-tap-highlight-color:transparent;">＋ リスト</button>
     </div>
     <div class="quiz-action-row">
@@ -473,7 +478,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;ba
       <div class="fc-back" id="fc-back">
         <div class="fc-meaning" id="fc-meaning"></div>
         <div class="fc-etym" id="fc-etym" style="display:none;"></div>
+        <button onclick="fcSearchImage()" style="margin-top:10px;background:#f2f2f7;border:1.5px solid #e5e5ea;border-radius:20px;padding:6px 14px;font-size:13px;color:#636366;cursor:pointer;">🔍 画像検索</button>
       </div>
+      <!-- スターボタン（カード右上） -->
+      <button id="fc-star-btn" onclick="fcToggleStar(event)"
+        style="position:absolute;top:10px;right:12px;background:none;border:none;font-size:22px;cursor:pointer;line-height:1;padding:2px;">☆</button>
     </div>
     <div class="fc-actions" id="fc-actions" style="display:none;">
       <button class="fc-btn fc-btn-ng" onclick="fcAnswer(false)">✗ わからない</button>
@@ -1206,15 +1215,17 @@ function getQLimitSec(){
 function buildPool(){
   var ALL=buildAllWords();
   var exam=getSelected("exam-chips","exam");
+  var starFilter=getSelected("star-chips","star");
   var dir=getSelected("dir-chips","dir");
   var status=getSelected("status-chips","status");
   var acc=getSelected("acc-chips","acc");
 
   return ALL.filter(function(v){
     // exam filter
-    if(exam==="starred") return starredWords.indexOf(v.word)>=0;
-    if(exam==="custom")  return v.isCustom || v.tag==="custom";
+    if(exam==="custom")  return (v.isCustom || v.tag==="custom") && (starFilter!=="starred" || starredWords.indexOf(v.word)>=0);
     if(exam!=="all" && v.tag!==exam) return false;
+    // star filter（試験モードと独立して組み合わせ）
+    if(starFilter==="starred" && starredWords.indexOf(v.word)<0) return false;
     // ja2en needs meaning
     if(dir==="ja2en" && (!v.meaning||v.meaning==="")) return false;
     var s=stats[v.word];
@@ -1581,6 +1592,21 @@ function switchQuizMode(mode){
 }
 
 // メインカードの設定を引き継いでフラッシュカード開始
+function fcToggleStar(e){
+  e.stopPropagation(); // カードのflipを防ぐ
+  if(fcIndex >= fcDeck.length) return;
+  var word = fcDeck[fcIndex].word;
+  var idx = starredWords.indexOf(word);
+  if(idx >= 0){ starredWords.splice(idx, 1); }
+  else { starredWords.push(word); }
+  save(STARS_KEY, starredWords);
+  var btn = document.getElementById("fc-star-btn");
+  var isStarred = starredWords.indexOf(word) >= 0;
+  btn.textContent = isStarred ? "★" : "☆";
+  btn.style.color = isStarred ? "#f59e0b" : "#c7c7cc";
+  showToast(isStarred ? "★ スター追加: "+word : "☆ スター解除: "+word);
+}
+
 function startFlashcardFromMain(){
   var pool = buildPool(); // メインカードのフィルター設定をそのまま使用
   if(!pool.length){ alert("対象の単語がありません。"); return; }
@@ -1653,6 +1679,14 @@ function fcRender(){
   if(fcIndex >= fcDeck.length){ fcShowResult(); return; }
   fcFlipped = false;
   var q = fcDeck[fcIndex];
+
+  // スターボタン状態更新
+  var starBtn = document.getElementById("fc-star-btn");
+  if(starBtn){
+    var isStarred = starredWords.indexOf(q.word) >= 0;
+    starBtn.textContent = isStarred ? "★" : "☆";
+    starBtn.style.color = isStarred ? "#f59e0b" : "#c7c7cc";
+  }
 
   // 表面
   document.getElementById("fc-word").textContent = q.word;
@@ -1985,6 +2019,20 @@ function updatePostStarBtn(){
   btn.style.background = isStarred ? "#fef3c7" : "#fff";
   btn.style.borderColor = isStarred ? "#f59e0b" : "#e5e5ea";
   btn.style.color = isStarred ? "#92400e" : "#1c1c1e";
+}
+
+function searchWordImage(){
+  // クイズモード：currentQuizWord を使用
+  var word = currentQuizWord ? currentQuizWord.word : null;
+  if(!word) return;
+  window.open("https://www.google.com/search?q="+encodeURIComponent(word)+"&tbm=isch", "_blank");
+}
+
+function fcSearchImage(){
+  // フラッシュカードモード：現在のカードの単語
+  if(fcIndex >= fcDeck.length) return;
+  var word = fcDeck[fcIndex].word;
+  window.open("https://www.google.com/search?q="+encodeURIComponent(word)+"&tbm=isch", "_blank");
 }
 
 function togglePostStar(){
