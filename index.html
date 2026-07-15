@@ -126,17 +126,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;ba
 .pl-popup-item .pl-icon{font-size:18px;width:24px;text-align:center;}
 .pl-popup-divider{height:1px;background:#f2f2f7;margin:4px 0;}
 .pl-popup-new{color:#007aff;font-weight:600;}
-/* プレイリスト画面 */
-.pl-card{background:#fff;border-radius:14px;padding:14px 16px;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,.07);display:flex;align-items:center;gap:12px;cursor:pointer;-webkit-tap-highlight-color:transparent;}
-.pl-card:active{background:#f2f2f7;}
-.pl-card-icon{font-size:28px;width:40px;text-align:center;}
-.pl-card-info{flex:1;min-width:0;}
-.pl-card-name{font-size:16px;font-weight:600;color:#1c1c1e;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.pl-card-count{font-size:12px;color:#8e8e93;margin-top:2px;}
-.pl-card-arrow{font-size:16px;color:#c7c7cc;}
-.pl-card-del{background:none;border:none;font-size:18px;color:#c7c7cc;cursor:pointer;padding:4px 8px;-webkit-tap-highlight-color:transparent;}
-.pl-card-del:active{color:#ff3b30;}
-/* プレイリスト詳細画面 */
+
+
+
+
+
+
+
+
+
+
+
 #pl-detail{display:none;padding:16px 14px 40px;max-width:480px;margin:0 auto;}
 #pl-detail.active{display:block;}
 .pl-detail-header{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
@@ -301,7 +301,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;ba
   <button class="nav-btn" onclick="showTab('quiz')">クイズ</button>
   <button class="nav-btn" onclick="showTab('list')">単語帳</button>
   <button class="nav-btn" onclick="showTab('synonym')">類語</button>
-  <button class="nav-btn" onclick="showTab('playlists')">リスト</button>
   <button class="nav-btn" onclick="showTab('tracker')">記録</button>
 </div>
 
@@ -376,30 +375,27 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;ba
   <div class="mode-card" style="background:linear-gradient(135deg,#1a1a2e,#16213e);color:#fff;">
     <div class="mode-card-title" style="color:#fff;display:flex;align-items:center;gap:8px;">⚡ タイムアタックモード</div>
     <div class="mode-card-desc" style="color:rgba(255,255,255,.7);">3分間で何問正解できるか挑戦！即答が鍵</div>
+    <div style="font-size:11px;color:rgba(255,255,255,.5);margin:6px 0 2px;">セット</div>
     <div class="filter-row" id="ta-exam-chips">
       <button class="filter-chip selected" data-exam="all" onclick="toggleTaChip(this,'ta-exam')" style="background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.3);color:#fff;">すべて</button>
       <button class="filter-chip" data-exam="gre" onclick="toggleTaChip(this,'ta-exam')" style="background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.15);color:rgba(255,255,255,.6);">GRE</button>
       <button class="filter-chip" data-exam="toefl1" onclick="toggleTaChip(this,'ta-exam')" style="background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.15);color:rgba(255,255,255,.6);">TOEFL頻出</button>
       <button class="filter-chip" data-exam="toefl2" onclick="toggleTaChip(this,'ta-exam')" style="background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.15);color:rgba(255,255,255,.6);">TOEFL S/W</button>
+      <button class="filter-chip" data-exam="top300" onclick="toggleTaChip(this,'ta-exam')" style="background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.15);color:rgba(255,255,255,.6);">🎯 頻出300</button>
+      <button class="filter-chip" data-exam="verb" onclick="toggleTaChip(this,'ta-exam')" style="background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.15);color:rgba(255,255,255,.6);">主題動詞</button>
+    </div>
+    <div style="font-size:11px;color:rgba(255,255,255,.5);margin:6px 0 2px;">絞り込み</div>
+    <div class="filter-row" id="ta-filter-chips">
+      <button class="filter-chip selected" data-tafilter="all" onclick="toggleTaChip(this,'ta-filter')" style="background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.3);color:#fff;">すべて</button>
+      <button class="filter-chip" data-tafilter="wrong" onclick="toggleTaChip(this,'ta-filter')" style="background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.15);color:rgba(255,255,255,.6);">😰 苦手のみ</button>
+      <button class="filter-chip" data-tafilter="starred" onclick="toggleTaChip(this,'ta-filter')" style="background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.15);color:rgba(255,255,255,.6);">★ スターのみ</button>
     </div>
     <div id="ta-best-preview" style="font-size:12px;color:rgba(255,255,255,.5);margin-bottom:10px;"></div>
     <button class="start-btn" onclick="startTimeAttack()" style="background:linear-gradient(135deg,#f093fb,#f5576c);">⚡ タイムアタック開始</button>
   </div>
 
   <!-- プレイリストから出題 -->
-  <div class="mode-card" id="pl-home-section" style="display:none;">
-    <div class="mode-card-title">🎵 プレイリストから出題</div>
-    <div class="mode-card-desc">作成したリストで集中練習</div>
-    <div class="pl-home-row" id="pl-home-row"></div>
-    <div class="filter-row" id="pl-dir-chips">
-      <button class="filter-chip selected" data-dir="en2ja" onclick="toggleChip(this,'pl-dir')">英→日</button>
-      <button class="filter-chip" data-dir="ja2en" onclick="toggleChip(this,'pl-dir')">日→英</button>
-    </div>
-    <button class="start-btn" id="pl-start-btn" onclick="startPlaylist()" style="margin-top:8px;">このリストで始める</button>
-  </div>
-</div>
-
-<!-- QUIZ -->
+  <!-- QUIZ -->
 <div id="quiz" class="screen">
   <!-- タイムアタック タイマー -->
   <div id="ta-timer-wrap">
@@ -435,7 +431,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;ba
       <span id="post-word-label" style="font-size:13px;font-weight:600;color:#1c1c1e;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
       <button id="post-star-btn" onclick="togglePostStar()" style="background:#fff;border:1.5px solid #e5e5ea;border-radius:20px;padding:5px 12px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;-webkit-tap-highlight-color:transparent;">☆</button>
       <button id="post-img-btn" onclick="searchWordImage()" style="background:#fff;border:1.5px solid #e5e5ea;border-radius:20px;padding:5px 12px;font-size:13px;font-weight:600;color:#636366;cursor:pointer;white-space:nowrap;-webkit-tap-highlight-color:transparent;">🔍</button>
-      <button id="post-list-btn" onclick="openPostPlPopup()" style="background:#fff;border:1.5px solid #e5e5ea;border-radius:20px;padding:5px 12px;font-size:13px;font-weight:600;color:#007aff;cursor:pointer;white-space:nowrap;-webkit-tap-highlight-color:transparent;">＋ リスト</button>
+
     </div>
     <div class="quiz-action-row">
       <button id="skip-btn" onclick="skipQ()">飛ばす →</button>
@@ -603,23 +599,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;ba
   <div id="synonym-list" style="padding:0 16px 16px;"></div>
 </div>
 
-<div id="playlists" class="screen">
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
-    <div style="font-size:20px;font-weight:700;color:#1c1c1e;">🎵 マイリスト</div>
-    <button onclick="openNewPlaylistModal()" style="background:#007aff;color:#fff;border:none;border-radius:20px;padding:8px 16px;font-size:14px;font-weight:600;cursor:pointer;">＋ 新規リスト</button>
-  </div>
-  <div id="pl-list-container">
-    <div style="text-align:center;color:#8e8e93;padding:40px 0;font-size:14px;">
-      リストがまだありません<br>単語帳で★を長押しして追加しましょう
-    </div>
-  </div>
-</div>
-
-<!-- PLAYLIST DETAIL (sub-screen inside playlists) -->
-<div id="pl-detail">
-  <div class="pl-detail-header">
-    <button class="pl-back-btn" onclick="closePlDetail()">‹</button>
-    <div class="pl-detail-title" id="pl-detail-name"></div>
     <button class="pl-detail-start" onclick="startPlaylistFromDetail()">▶ 出題</button>
   </div>
   <div id="pl-detail-count" style="font-size:12px;color:#8e8e93;margin-bottom:12px;"></div>
@@ -668,18 +647,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;ba
   </div>
 </div>
 
-<!-- PLAYLIST LONG-PRESS POPUP -->
-<div id="pl-popup-overlay" onclick="closePlPopup()"></div>
-<div class="pl-popup" id="pl-popup" style="display:none;">
-  <div class="pl-popup-title">リストに追加</div>
-  <div id="pl-popup-lists"></div>
-  <div class="pl-popup-divider"></div>
-  <div class="pl-popup-item pl-popup-new" onclick="openNewPlaylistModalFromPopup()">
-    <span class="pl-icon">＋</span>新しいリストを作成
-  </div>
-</div>
-
-<!-- NEW PLAYLIST MODAL -->
+<!-- ADD WORD MODAL -->
 <div class="modal-overlay" id="new-playlist-modal">
   <div class="modal-box">
     <div class="modal-title">🎵 新しいリストを作成</div>
@@ -805,15 +773,11 @@ var starredWords= JSON.parse(localStorage.getItem(STARS_KEY)  || "[]");
 var customWords = JSON.parse(localStorage.getItem(CUSTOM_KEY) || "[]");
 var studyDays   = JSON.parse(localStorage.getItem(DAYS_KEY)   || "[]");
 // playlists: [{id, name, icon, words:[word_string,...]}]
-var PLAYLISTS_KEY = "vocab_playlists";
-var playlists   = JSON.parse(localStorage.getItem(PLAYLISTS_KEY) || "[]");
 // time attack records: [{score, attempted, dateStr, exam}]
 var TA_KEY      = "vocab_ta_records";
 var taRecords   = JSON.parse(localStorage.getItem(TA_KEY) || "[]");
 
 var plPopupTargetWord = null;
-var plDetailId = null;
-var selectedPlHomeId = null;
 var pendingPlIconWord = null;
 
 // time attack state
@@ -880,13 +844,11 @@ function showTab(t){
   // タイムアタック中に別タブへ移動したら停止
   if(taMode && t!=="quiz"){ if(taTimer){clearInterval(taTimer);taTimer=null;} taMode=false; }
   // プレイリスト詳細が開いているときは閉じる
-  document.getElementById("pl-detail").classList.remove("active");
-  document.getElementById("pl-detail").style.display="none";
   document.querySelectorAll(".screen").forEach(function(s){s.classList.remove("active");});
   document.querySelectorAll(".nav-btn").forEach(function(b){b.classList.remove("active");});
   var el = document.getElementById(t);
   if(el) el.classList.add("active");
-  var tabs=["home","quiz","list","synonym","playlists","tracker"];
+  var tabs=["home","quiz","list","synonym","tracker"];
   var idx=tabs.indexOf(t);
   if(idx>=0) document.querySelectorAll(".nav-btn")[idx].classList.add("active");
   var fab=document.getElementById("fab-add");
@@ -895,9 +857,8 @@ function showTab(t){
     document.getElementById("fc-wrap").style.display = "none";
   }
   if(t==="list") filterList();
-  if(t==="home"){ updatePoolCount(); renderPlHome(); }
+  if(t==="home"){ updatePoolCount(); }
   if(t==="tracker") renderTracker();
-  if(t==="playlists") renderPlaylists();
   if(t==="synonym") renderSynonym();
 }
 
@@ -1118,10 +1079,14 @@ function buildPool(){
 
   return ALL.filter(function(v){
     // exam filter
-    if(exam==="custom")  return (v.isCustom || v.tag==="custom") && (starFilter!=="starred" || starredWords.indexOf(v.word)>=0);
-    if(exam==="top300")  return TOP300_WORDS.indexOf(v.word)>=0;
-    if(exam!=="all" && v.tag!==exam) return false;
-    // star filter（試験モードと独立して組み合わせ）
+    if(exam==="custom"){
+      if(!(v.isCustom || v.tag==="custom")) return false;
+    } else if(exam==="top300"){
+      if(TOP300_WORDS.indexOf(v.word)<0) return false;
+    } else if(exam!=="all"){
+      if(v.tag!==exam) return false;
+    }
+    // star filter（全セットと組み合わせ可能）
     if(starFilter==="starred" && starredWords.indexOf(v.word)<0) return false;
     // ja2en needs meaning
     if(dir==="ja2en" && (!v.meaning||v.meaning==="")) return false;
@@ -1131,7 +1096,8 @@ function buildPool(){
     if(status==="new"    && attempts>0) return false;
     if(status==="tried"  && attempts===0) return false;
     if(status==="wrong"  && wrongWords.indexOf(v.word)<0) return false;
-    if(acc!=="all" && attempts>0){
+    if(acc!=="all"){
+      if(attempts===0) return false; // 未挑戦は苦手度フィルターから除外
       if(acc==="weak" && accuracy>=0.5) return false;
       if(acc==="mid"  && (accuracy<0.5||accuracy>=0.8)) return false;
       if(acc==="good" && accuracy<0.8) return false;
@@ -1589,8 +1555,8 @@ function startFlashcard(){
     if(!v.meaning || v.meaning === "") return false;
     if(filter==="wrong") return wrongWords.indexOf(v.word) >= 0;
     if(filter==="unseen"){
-      var s = vocabStats[v.word];
-      return !s || (s.correct===0 && s.wrong===0);
+      var s = stats[v.word];
+      return !s || (s.attempts===0);
     }
     return true;
   });
@@ -1725,11 +1691,19 @@ function fcRetryNG(){
 
 function startTimeAttack(){
   var exam = getSelected("ta-exam-chips","exam") || "all";
+  var taFilter = getSelected("ta-filter-chips","tafilter") || "all";
   taExam = exam;
   var ALL = buildAllWords();
   var pool = ALL.filter(function(v){
-    if(exam!=="all" && v.tag!==exam) return false;
-    return v.meaning && v.meaning !== "";
+    if(!v.meaning || v.meaning === "") return false;
+    // セットフィルター
+    if(exam==="top300"){ if(TOP300_WORDS.indexOf(v.word)<0) return false; }
+    else if(exam==="custom"){ if(!(v.isCustom||v.tag==="custom")) return false; }
+    else if(exam!=="all"){ if(v.tag!==exam) return false; }
+    // 絞り込みフィルター
+    if(taFilter==="wrong" && wrongWords.indexOf(v.word)<0) return false;
+    if(taFilter==="starred" && starredWords.indexOf(v.word)<0) return false;
+    return true;
   });
   if(pool.length < 4){ alert("単語が少なすぎます。別のセットを選んでください。"); return; }
   taPool = shuffle(pool);
@@ -1997,253 +1971,13 @@ function togglePostStar(){
   showToast(starredWords.indexOf(word)>=0 ? "★ スター追加: "+word : "☆ スター解除: "+word);
 }
 
-function openPostPlPopup(){
-  if(!currentQuizWord) return;
-  var anchor = document.getElementById("post-list-btn");
-  openPlPopup(currentQuizWord.word, anchor);
-}
 
 
-function savePlaylists(){ save(PLAYLISTS_KEY, playlists); }
-function genPlId(){ return "pl_"+Date.now()+"_"+Math.random().toString(36).slice(2,6); }
 
-// 長押しで呼ばれる
-function openPlPopup(word, anchorEl){
-  plPopupTargetWord = word;
-  // 既存リストをポップアップに表示
-  var container = document.getElementById("pl-popup-lists");
-  container.innerHTML = "";
-  if(playlists.length === 0){
-    container.innerHTML = '<div style="padding:8px 16px;font-size:13px;color:#8e8e93;">リストがまだありません</div>';
-  } else {
-    playlists.forEach(function(pl){
-      var inList = pl.words.indexOf(word) >= 0;
-      var item = document.createElement("div");
-      item.className = "pl-popup-item";
-      item.innerHTML = '<span class="pl-icon">'+pl.icon+'</span>'
-        + '<span style="flex:1;">'+pl.name+'</span>'
-        + (inList ? '<span style="color:#34c759;font-size:18px;">✓</span>' : '');
-      item.onclick = function(){ toggleWordInPlaylist(pl.id, word); };
-      container.appendChild(item);
-    });
-  }
-  // 位置計算
-  var popup = document.getElementById("pl-popup");
-  var overlay = document.getElementById("pl-popup-overlay");
-  popup.style.display = "block";
-  overlay.style.display = "block";
-  var rect = anchorEl.getBoundingClientRect();
-  var top = rect.bottom + 6;
-  var left = rect.left - 180;
-  if(left < 8) left = 8;
-  if(top + 280 > window.innerHeight) top = rect.top - 290;
-  popup.style.top = top + "px";
-  popup.style.left = left + "px";
-}
-function closePlPopup(){
-  document.getElementById("pl-popup").style.display = "none";
-  document.getElementById("pl-popup-overlay").style.display = "none";
-  plPopupTargetWord = null;
-  pendingPlIconWord = null;
-}
 
-function toggleWordInPlaylist(plId, word){
-  var pl = playlists.find(function(p){ return p.id === plId; });
-  if(!pl) return;
-  var idx = pl.words.indexOf(word);
-  if(idx >= 0){
-    pl.words.splice(idx, 1);
-    showToast("「"+word+"」を「"+pl.name+"」から削除しました");
-  } else {
-    pl.words.push(word);
-    showToast("「"+word+"」を「"+pl.name+"」に追加しました ✓");
-  }
-  savePlaylists();
-  // ポップアップ内のチェックマーク更新
-  closePlPopup();
-  renderPlHome();
-}
 
-// 新規プレイリストモーダル
-var selectedPlIcon = "📚";
-function openNewPlaylistModal(){
-  pendingPlIconWord = null;
-  document.getElementById("new-pl-name").value = "";
-  selectedPlIcon = "📚";
-  document.querySelectorAll(".pl-icon-opt").forEach(function(el){
-    el.style.border = "2px solid " + (el.getAttribute("data-icon")==="📚" ? "#007aff" : "transparent");
-  });
-  document.getElementById("new-playlist-modal").classList.add("open");
-}
-function openNewPlaylistModalFromPopup(){
-  pendingPlIconWord = plPopupTargetWord;
-  closePlPopup();
-  document.getElementById("new-pl-name").value = "";
-  selectedPlIcon = "📚";
-  document.querySelectorAll(".pl-icon-opt").forEach(function(el){
-    el.style.border = "2px solid " + (el.getAttribute("data-icon")==="📚" ? "#007aff" : "transparent");
-  });
-  document.getElementById("new-playlist-modal").classList.add("open");
-}
-function closeNewPlaylistModal(){
-  document.getElementById("new-playlist-modal").classList.remove("open");
-  pendingPlIconWord = null;
-}
-function selectPlIcon(el){
-  selectedPlIcon = el.getAttribute("data-icon");
-  document.querySelectorAll(".pl-icon-opt").forEach(function(e){
-    e.style.border = "2px solid " + (e === el ? "#007aff" : "transparent");
-  });
-}
-function saveNewPlaylist(){
-  var name = document.getElementById("new-pl-name").value.trim();
-  if(!name){ alert("リスト名を入力してください。"); return; }
-  var newPl = { id: genPlId(), name: name, icon: selectedPlIcon, words: [] };
-  if(pendingPlIconWord){
-    newPl.words.push(pendingPlIconWord);
-    showToast("「"+pendingPlIconWord+"」を「"+name+"」に追加しました ✓");
-  }
-  playlists.push(newPl);
-  savePlaylists();
-  closeNewPlaylistModal();
-  renderPlaylists();
-  renderPlHome();
-}
 
-// プレイリスト一覧画面
-function renderPlaylists(){
-  var container = document.getElementById("pl-list-container");
-  if(playlists.length === 0){
-    container.innerHTML = '<div style="text-align:center;color:#8e8e93;padding:40px 0;font-size:14px;">リストがまだありません<br>単語帳で★を長押しして追加しましょう</div>';
-    return;
-  }
-  container.innerHTML = "";
-  playlists.forEach(function(pl){
-    var card = document.createElement("div");
-    card.className = "pl-card";
-    card.innerHTML =
-      '<div class="pl-card-icon">'+pl.icon+'</div>'
-      +'<div class="pl-card-info">'
-        +'<div class="pl-card-name">'+pl.name+'</div>'
-        +'<div class="pl-card-count">'+pl.words.length+'語</div>'
-      +'</div>'
-      +'<div class="pl-card-arrow">›</div>'
-      +'<button class="pl-card-del" title="削除">🗑</button>';
-    card.querySelector(".pl-card-del").onclick = function(e){
-      e.stopPropagation();
-      if(confirm("「"+pl.name+"」を削除しますか？")){
-        playlists = playlists.filter(function(p){ return p.id !== pl.id; });
-        savePlaylists();
-        renderPlaylists();
-        renderPlHome();
-      }
-    };
-    card.onclick = function(e){
-      if(e.target.closest(".pl-card-del")) return;
-      openPlDetail(pl.id);
-    };
-    container.appendChild(card);
-  });
-}
 
-// プレイリスト詳細
-function openPlDetail(plId){
-  plDetailId = plId;
-  var pl = playlists.find(function(p){ return p.id === plId; });
-  if(!pl) return;
-  // playlists画面を隠してdetailを表示
-  document.getElementById("playlists").classList.remove("active");
-  var detail = document.getElementById("pl-detail");
-  detail.style.display = "block";
-  detail.classList.add("active");
-  document.getElementById("pl-detail-name").textContent = pl.icon + " " + pl.name;
-  document.getElementById("pl-detail-count").textContent = pl.words.length + "語";
-  var ALL = buildAllWords();
-  var wordMap = {};
-  ALL.forEach(function(v){ wordMap[v.word] = v; });
-  var container = document.getElementById("pl-detail-words");
-  container.innerHTML = "";
-  if(pl.words.length === 0){
-    container.innerHTML = '<div style="text-align:center;color:#8e8e93;padding:32px 0;font-size:14px;">このリストにはまだ単語がありません</div>';
-    return;
-  }
-  pl.words.forEach(function(w){
-    var v = wordMap[w] || {word:w, meaning:"", etymology:""};
-    var row = document.createElement("div");
-    row.className = "pl-detail-word";
-    row.innerHTML =
-      '<div style="flex:1;">'
-        +'<div class="pl-detail-word-text">'+v.word+'</div>'
-        +'<div class="pl-detail-word-meaning">'+v.meaning+'</div>'
-      +'</div>'
-      +'<button class="pl-detail-word-del" onclick="removeWordFromPlDetail(\''+plId+'\',\''+w.replace(/'/g,"\\'")+'\')" title="削除">✕</button>';
-    container.appendChild(row);
-  });
-}
-function removeWordFromPlDetail(plId, word){
-  var pl = playlists.find(function(p){ return p.id === plId; });
-  if(!pl) return;
-  pl.words = pl.words.filter(function(w){ return w !== word; });
-  savePlaylists();
-  openPlDetail(plId); // 再描画
-}
-function closePlDetail(){
-  document.getElementById("pl-detail").classList.remove("active");
-  document.getElementById("pl-detail").style.display = "none";
-  document.getElementById("playlists").classList.add("active");
-  plDetailId = null;
-}
-function startPlaylistFromDetail(){
-  if(!plDetailId) return;
-  var pl = playlists.find(function(p){ return p.id === plDetailId; });
-  if(!pl || pl.words.length === 0){ alert("単語がまだありません。"); return; }
-  closePlDetail();
-  var ALL = buildAllWords();
-  var wordMap = {};
-  ALL.forEach(function(v){ wordMap[v.word] = v; });
-  var pool = pl.words.map(function(w){ return wordMap[w]; }).filter(Boolean);
-  if(!pool.length){ alert("出題できる単語がありません。"); return; }
-  currentDir = "en2ja";
-  lastPool = pool;
-  launchQuiz(shuffle(pool).slice(0, Math.min(pool.length, 20)));
-}
-
-// ホームのプレイリストチップ
-function renderPlHome(){
-  var section = document.getElementById("pl-home-section");
-  var row = document.getElementById("pl-home-row");
-  if(playlists.length === 0){ section.style.display = "none"; return; }
-  section.style.display = "block";
-  row.innerHTML = "";
-  playlists.forEach(function(pl){
-    var chip = document.createElement("div");
-    chip.className = "pl-home-chip" + (selectedPlHomeId === pl.id ? " selected" : "");
-    chip.innerHTML = pl.icon + " " + pl.name + ' <span class="chip-count">'+pl.words.length+'</span>';
-    chip.onclick = function(){
-      selectedPlHomeId = (selectedPlHomeId === pl.id) ? null : pl.id;
-      renderPlHome();
-    };
-    row.appendChild(chip);
-  });
-  var btn = document.getElementById("pl-start-btn");
-  btn.disabled = !selectedPlHomeId;
-  btn.style.background = selectedPlHomeId ? "#007aff" : "#c7c7cc";
-}
-function startPlaylist(){
-  if(!selectedPlHomeId) return;
-  var pl = playlists.find(function(p){ return p.id === selectedPlHomeId; });
-  if(!pl || pl.words.length === 0){ alert("単語がまだありません。"); return; }
-  var ALL = buildAllWords();
-  var wordMap = {};
-  ALL.forEach(function(v){ wordMap[v.word] = v; });
-  var pool = pl.words.map(function(w){ return wordMap[w]; }).filter(Boolean);
-  if(!pool.length){ alert("出題できる単語がありません。"); return; }
-  var selDir = getSelected("pl-dir-chips","dir");
-  currentDir = selDir || "en2ja";
-  lastPool = pool;
-  var count = parseInt(getSelected("count-chips","count")||"20");
-  launchQuiz(shuffle(pool).slice(0, Math.min(pool.length, count)));
-}
 
 // トースト通知
 function showToast(msg){
@@ -2503,7 +2237,6 @@ function renderTracker(){
 // INIT
 // ================================================================
 updatePoolCount();
-renderPlHome();
 updateTaBestPreview();
 </script>
 </body>
